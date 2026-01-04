@@ -13,8 +13,8 @@ export default function SignupPage() {
   return (
     <AnimatedBackground>
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-md p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
-          <h2 className="text-3xl font-bold text-center mb-6 text-white">
+        <div className="w-full max-w-md p-4 md:p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-white">
             Create Your AutoSRS Account
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -31,7 +31,7 @@ export default function SignupPage() {
                   placeholder="e.g., Talal Ahmed"
                   required
                 />
-                <User className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <User className="w-5 h-5 text-gray-300 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
 
@@ -47,7 +47,7 @@ export default function SignupPage() {
                   placeholder="user@university.edu"
                   required
                 />
-                <Mail className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <Mail className="w-5 h-5 text-gray-300 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
             
@@ -63,7 +63,7 @@ export default function SignupPage() {
                   placeholder="Create a strong password"
                   required
                 />
-                <Lock className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <Lock className="w-5 h-5 text-gray-300 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
 
@@ -79,7 +79,7 @@ export default function SignupPage() {
                   placeholder="Re-enter password"
                   required
                 />
-                <Lock className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <Lock className="w-5 h-5 text-gray-300 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
 

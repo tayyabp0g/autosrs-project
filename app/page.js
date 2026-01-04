@@ -1,17 +1,19 @@
+"use client";
 import Link from "next/link";
 import { Bot, ArrowRight, FileText, Zap } from "lucide-react";
-import AnimatedBackground from "../components/AnimatedBackground.jsx"; // <-- Yahan change kiya hai
+import AnimatedBackground from "../components/AnimatedBackground.jsx";
+import { motion } from "framer-motion";
 
 export default function LandingPage() {
   return (
     <AnimatedBackground>
-      <nav className="flex items-center justify-between px-8 py-6 backdrop-blur-sm bg-white/5 border-b border-white/10">
+      <nav className="flex items-center justify-between px-4 md:px-8 py-6 backdrop-blur-sm bg-white/5 border-b border-white/10">
         <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           AutoSRS.ai
         </div>
-        <div className="space-x-4">
-          <Link href="/login" className="px-4 py-2 hover:text-blue-300 transition">Login</Link>
-          <Link href="/signup" className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">Sign Up</Link>
+        <div className="flex space-x-2 md:space-x-4">
+          <Link href="/login" className="px-3 md:px-4 py-2 text-sm hover:text-blue-300 transition">Login</Link>
+          <Link href="/signup" className="px-3 md:px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition text-sm">Sign Up</Link>
         </div>
       </nav>
 
@@ -31,6 +33,118 @@ export default function LandingPage() {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
           </button>
         </Link>
+
+      {/* AI-Themed Background Animations */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-20">
+        {/* Neural Network Nodes */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`node-${i}`}
+            className="absolute w-2 h-2 bg-blue-400 rounded-full"
+            style={{
+              left: `${10 + (i * 7)}%`,
+              top: `${20 + (i * 5)}%`,
+            }}
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.3, 1, 0.3],
+            }}
+            transition={{
+              duration: 3 + (i * 0.5),
+              repeat: Infinity,
+              delay: i * 0.2,
+            }}
+          />
+        ))}
+
+        {/* Data Flow Particles */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 bg-purple-400 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+
+        {/* Circuit Connections */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {[...Array(6)].map((_, i) => (
+            <motion.path
+              key={`circuit-${i}`}
+              d={`M${10 + i * 15} ${20 + i * 10} Q${30 + i * 10} ${40 + i * 5} ${50 + i * 10} ${60 + i * 5}`}
+              stroke="rgba(59, 130, 246, 0.3)"
+              strokeWidth="0.5"
+              fill="none"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.3,
+              }}
+            />
+          ))}
+        </svg>
+
+        {/* AI Brain Waves */}
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={`wave-${i}`}
+            className="absolute border border-cyan-400/30 rounded-full"
+            style={{
+              width: `${50 + i * 20}px`,
+              height: `${50 + i * 20}px`,
+              left: `${70 + i * 5}%`,
+              top: `${30 + i * 8}%`,
+            }}
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+          />
+        ))}
+
+        {/* Binary Code Stream */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={`binary-${i}`}
+            className="absolute text-cyan-400/40 text-xs font-mono"
+            style={{
+              left: `${15 + i * 30}%`,
+              top: `${10 + i * 25}%`,
+            }}
+            animate={{
+              y: [0, 100],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              delay: i * 1.5,
+            }}
+          >
+            {Math.random() > 0.5 ? '01' : '10'}
+          </motion.div>
+        ))}
+      </div>
       </main>
     </AnimatedBackground>
   );

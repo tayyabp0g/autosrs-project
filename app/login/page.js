@@ -15,7 +15,7 @@ export default function LoginPage() {
   return (
     <AnimatedBackground>
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-md p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
+        <div className="w-full max-w-md p-4 md:p-8 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
           <h2 className="text-3xl font-bold text-center mb-6 text-white">
             Welcome Back to AutoSRS
           </h2>
@@ -32,7 +32,7 @@ export default function LoginPage() {
                   placeholder="Enter your email"
                   required
                 />
-                <User className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <User className="w-5 h-5 text-gray-300 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
             
@@ -48,7 +48,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   required
                 />
-                <Lock className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <Lock className="w-5 h-5 text-gray-300 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
 

@@ -1,23 +1,61 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, Menu, Plus, MessageSquare, FileText, Download, User } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function GeneratorPage() {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Dummy history data
   const history = ["E-Commerce SRS", "Hospital Mgmt System", "Portfolio Website"];
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+    
+    const userMessage = { text: input, sender: 'user', id: Date.now() };
+    setMessages(prev => [...prev, userMessage]);
+    setInput("");
+    setIsTyping(true);
+    
+    // Simulate AI response
+    setTimeout(() => {
+      const aiMessage = { 
+        text: "I'm analyzing your project requirements and generating the SRS document. This will take a moment...", 
+        sender: 'ai', 
+        id: Date.now() + 1 
+      };
+      setMessages(prev => [...prev, aiMessage]);
+      setIsTyping(false);
+    }, 2000);
+  };
 
   return (
     <div className="flex h-screen bg-gray-900 text-white overflow-hidden font-sans">
       
       {/* Sidebar - ChatGPT Style */}
       <motion.aside 
-        initial={{ width: 260 }}
+        initial={{ width: 0 }}
         animate={{ width: isSidebarOpen ? 260 : 0 }}
-        className="bg-black/50 border-r border-white/10 flex flex-col overflow-hidden"
+        className="bg-black/50 border-r border-white/10 flex flex-col overflow-hidden md:relative absolute z-20 h-full md:h-auto"
       >
         <div className="p-4">
           <button className="flex items-center gap-2 w-full px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition text-sm">
@@ -39,7 +77,7 @@ export default function GeneratorPage() {
         <div className="p-4 border-t border-white/10">
           <button className="flex items-center gap-3 w-full px-2 py-2 hover:bg-white/5 rounded-lg transition">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-              <User className="w-4 h-4" />
+              <User className="w-4 h-4 text-white" />
             </div>
             <div className="text-sm text-left">
               <div className="font-medium">User Name</div>
@@ -49,8 +87,8 @@ export default function GeneratorPage() {
         </div>
       </motion.aside>
 
-      {/* Main Chat Area */}
       <main className="flex-1 flex flex-col relative">
+        {isSidebarOpen && isMobile && <div className="absolute inset-0 bg-black/50 z-10" onClick={() => setSidebarOpen(false)}></div>}
         {/* Header */}
         <header className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-gray-900/50 backdrop-blur">
           <div className="flex items-center gap-3">
@@ -67,30 +105,76 @@ export default function GeneratorPage() {
 
         {/* Chat Content */}
         <div className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
-          {input.length === 0 ? (
+          {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
               <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-4">
                 <FileText className="w-8 h-8 text-blue-400" />
               </div>
               <h2 className="text-2xl font-bold">What project are we building today?</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl w-full">
-                <CardExample text="Create an SRS for a Food Delivery App." />
-                <CardExample text="Build requirements for an IoT System." />
+                <CardExample text="Create an SRS for a Food Delivery App." onClick={() => setInput("Create an SRS for a Food Delivery App.")} />
+                <CardExample text="Build requirements for an IoT System." onClick={() => setInput("Build requirements for an IoT System.")} />
               </div>
             </div>
           ) : (
             <div className="max-w-3xl mx-auto space-y-6">
-               <div className="flex gap-4 justify-end">
-                  <div className="bg-blue-600 px-4 py-2 rounded-2xl rounded-tr-sm max-w-[80%]">
-                    {input}
+              {messages.map((message) => (
+                <motion.div 
+                  key={message.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`flex gap-4 ${message.sender === 'user' ? 'justify-start' : ''}`}
+                >
+                  {message.sender === 'user' && (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center shrink-0">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                  {message.sender === 'ai' && (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
+                      <span className="text-xs font-bold text-white">AI</span>
+                    </div>
+                  )}
+                  <div className={`px-4 py-2 rounded-2xl max-w-[80%] ${
+                    message.sender === 'user' 
+                      ? 'bg-blue-600 rounded-tl-sm' 
+                      : 'bg-white/5 rounded-tl-sm'
+                  }`}>
+                    {message.text}
                   </div>
-               </div>
-               <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0">AI</div>
-                  <div className="bg-white/5 px-4 py-2 rounded-2xl rounded-tl-sm max-w-[80%]">
-                    Analyzing...
+                </motion.div>
+              ))}
+              {isTyping && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex gap-4"
+                >
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
+                    <span className="text-xs font-bold text-white">AI</span>
                   </div>
-               </div>
+                  <div className="bg-white/5 px-4 py-2 rounded-2xl rounded-tl-sm">
+                    <div className="flex space-x-1">
+                      <motion.div 
+                        className="w-2 h-2 bg-gray-400 rounded-full"
+                        animate={{ y: [0, -5, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity }}
+                      />
+                      <motion.div 
+                        className="w-2 h-2 bg-gray-400 rounded-full"
+                        animate={{ y: [0, -5, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}
+                      />
+                      <motion.div 
+                        className="w-2 h-2 bg-gray-400 rounded-full"
+                        animate={{ y: [0, -5, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity, delay: 0.4 }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
             </div>
           )}
         </div>
@@ -104,10 +188,15 @@ export default function GeneratorPage() {
               rows={1}
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             />
-            <button className="absolute right-3 bottom-3 p-1.5 bg-blue-600 rounded-lg hover:bg-blue-700 transition" disabled={!input}>
+            <motion.button 
+              className="absolute right-3 bottom-3 p-1.5 bg-blue-600 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!input.trim() || isTyping}
+              onClick={handleSend}
+            >
               <Send className="w-4 h-4" />
-            </button>
+            </motion.button>
           </div>
         </div>
       </main>
@@ -116,9 +205,12 @@ export default function GeneratorPage() {
 }
 
 // Helper component
-function CardExample({ text }) {
+function CardExample({ text, onClick }) {
   return (
-    <button className="p-4 text-sm text-left bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition">
+    <button 
+      className="p-4 text-sm text-left bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition"
+      onClick={onClick}
+    >
       {text}
     </button>
   );
