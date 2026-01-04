@@ -1,15 +1,22 @@
 "use client";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 
 export default function AnimatedBackground({ children }) {
   // Generate random star positions
-  const stars = Array.from({ length: 50 }, (_, i) => ({
+  const stars = useMemo(() => Array.from({ length: 50 }, (_, i) => ({
     id: i,
+    // eslint-disable-next-line react-hooks/purity
     x: Math.random() * 100,
+    // eslint-disable-next-line react-hooks/purity
     y: Math.random() * 100,
+    // eslint-disable-next-line react-hooks/purity
     size: Math.random() * 2 + 1,
+    // eslint-disable-next-line react-hooks/purity
     delay: Math.random() * 5,
-  }));
+    // eslint-disable-next-line react-hooks/purity
+    duration: 2 + Math.random() * 3,
+  })), []);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white selection:bg-blue-500 selection:text-white">
@@ -29,7 +36,7 @@ export default function AnimatedBackground({ children }) {
               opacity: [0.2, 1, 0.2],
             }}
             transition={{
-              duration: 2 + Math.random() * 3,
+              duration: star.duration,
               repeat: Infinity,
               delay: star.delay,
             }}

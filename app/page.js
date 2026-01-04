@@ -3,8 +3,30 @@ import Link from "next/link";
 import { Bot, ArrowRight, FileText, Zap } from "lucide-react";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 
 export default function LandingPage() {
+  const particles = useMemo(() => [...Array(8)].map((_, i) => ({
+    id: i,
+    // eslint-disable-next-line react-hooks/purity
+    x: Math.random() * 100,
+    // eslint-disable-next-line react-hooks/purity
+    y: Math.random() * 100,
+    // eslint-disable-next-line react-hooks/purity
+    duration: 4 + Math.random() * 2,
+    // eslint-disable-next-line react-hooks/purity
+    delay: Math.random() * 2,
+  })), []);
+
+  const binaryTexts = useMemo(() => [...Array(3)].map((_, i) => ({
+    id: i,
+    // eslint-disable-next-line react-hooks/purity
+    x: Math.random() * 100,
+    // eslint-disable-next-line react-hooks/purity
+    y: Math.random() * 100,
+    // eslint-disable-next-line react-hooks/purity
+    text: Math.random() > 0.5 ? '01' : '10',
+  })), []);
   return (
     <AnimatedBackground>
       <nav className="flex items-center justify-between px-4 md:px-8 py-6 backdrop-blur-sm bg-white/5 border-b border-white/10">
@@ -58,13 +80,13 @@ export default function LandingPage() {
         ))}
 
         {/* Data Flow Particles */}
-        {[...Array(8)].map((_, i) => (
+        {particles.map((particle) => (
           <motion.div
-            key={`particle-${i}`}
+            key={`particle-${particle.id}`}
             className="absolute w-1 h-1 bg-purple-400 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
             }}
             animate={{
               x: [0, 100, 0],
@@ -72,9 +94,9 @@ export default function LandingPage() {
               opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 4 + Math.random() * 2,
+              duration: particle.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: particle.delay,
             }}
           />
         ))}
@@ -123,9 +145,9 @@ export default function LandingPage() {
         ))}
 
         {/* Binary Code Stream */}
-        {[...Array(3)].map((_, i) => (
+        {binaryTexts.map((binary, i) => (
           <motion.div
-            key={`binary-${i}`}
+            key={`binary-${binary.id}`}
             className="absolute text-cyan-400/40 text-xs font-mono"
             style={{
               left: `${15 + i * 30}%`,
@@ -141,7 +163,7 @@ export default function LandingPage() {
               delay: i * 1.5,
             }}
           >
-            {Math.random() > 0.5 ? '01' : '10'}
+            {binary.text}
           </motion.div>
         ))}
       </div>
