@@ -49,3 +49,20 @@
 [2026-01-28T13:06:53.874Z] [WARN] Login attempt with non-existent username: testuser@test.com
 [2026-01-28T13:07:05.470Z] [INFO] 📨 POST /api/auth/login
 [2026-01-28T13:07:05.804Z] [INFO] ✅ User logged in: testuser (ID: 2)
+[2026-01-28T13:51:23.139Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:51:34.436Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:51:52.288Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:51:53.010Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:52:02.984Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:52:03.608Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:52:03.778Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:52:03.935Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:52:04.153Z] [INFO] 📨 POST /api/auth/signup
+[2026-01-28T13:53:26.026Z] [INFO] 📨 POST /api/auth/login
+[2026-01-28T13:53:26.283Z] [INFO] ✅ User logged in: ali (ID: 1)
+[2026-01-28T13:53:38.503Z] [INFO] 📨 POST /api/auth/login
+[2026-01-28T13:53:38.741Z] [INFO] ✅ User logged in: ali (ID: 1)
+[2026-01-28T13:54:16.169Z] [INFO] 📨 POST /api/auth/login
+[2026-01-28T13:54:16.462Z] [INFO] ✅ User logged in: ali (ID: 1)
+[2026-01-28T13:57:02.065Z] [INFO] 📨 POST /api/auth/login
+[2026-01-28T13:57:02.332Z] [INFO] ✅ User logged in: ali (ID: 1)
