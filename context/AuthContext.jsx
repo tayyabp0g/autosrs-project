@@ -12,23 +12,26 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is logged in on mount - FIX HYDRATION ERROR
   useEffect(() => {
-    // Set mounted first to prevent hydration issues
     setIsMounted(true);
     
-    // Only run on client side to avoid hydration mismatch
-    const storedToken = localStorage.getItem('authToken');
-    if (storedToken) {
-      setToken(storedToken);
-      // Try to get user info from stored data
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch (e) {
-          console.error('Failed to parse stored user:', e);
-          localStorage.removeItem('user');
+    try {
+      // Only run on client side to avoid hydration mismatch
+      const storedToken = localStorage.getItem('authToken');
+      if (storedToken) {
+        setToken(storedToken);
+        // Try to get user info from stored data
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (e) {
+            console.error('Failed to parse stored user:', e);
+            localStorage.removeItem('user');
+          }
         }
       }
+    } catch (error) {
+      console.error("LocalStorage access failed:", error);
     }
   }, []);
 
@@ -74,8 +77,12 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         setToken(data.token);
         setUser(data.user);
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        try {
+          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+        } catch (e) {
+          console.error("Failed to save to localStorage", e);
+        }
         return { success: true, message: data.message };
       } else {
         return { success: false, message: data.message || 'Signup failed' };
@@ -87,7 +94,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message: 'Request timeout. Backend server not responding.' };
       }
       
-      return { success: false, message: `Error during signup: ${error.message}. Make sure backend is running on http://localhost:5000` };
+      return { success: false, message: `Error during signup: ${error.message}.` };
     }
   };
 
@@ -131,8 +138,12 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         setToken(data.token);
         setUser(data.user);
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        try {
+          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+        } catch (e) {
+          console.error("Failed to save to localStorage", e);
+        }
         return { success: true, message: data.message };
       } else {
         return { success: false, message: data.message || 'Login failed' };
@@ -144,7 +155,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message: 'Request timeout. Backend server not responding.' };
       }
       
-      return { success: false, message: `Error during login: ${error.message}. Make sure backend is running on http://localhost:5000` };
+      return { success: false, message: `Error during login: ${error.message}.` };
     }
   };
 
@@ -152,8 +163,12 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
+    try {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+    } catch (e) {
+      console.error("Failed to clear localStorage", e);
+    }
   };
 
   return (
