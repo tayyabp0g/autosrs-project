@@ -35,12 +35,12 @@ export const AuthProvider = ({ children }) => {
   // Signup function
   const signup = async (username, email, password, confirmPassword) => {
     try {
-      console.log('🔄 Starting signup request to http://localhost:5000/api/auth/signup');
+      console.log('🔄 Starting signup request to /api/auth/signup');
       
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,12 +94,12 @@ export const AuthProvider = ({ children }) => {
   // Login function
   const login = async (username, password) => {
     try {
-      console.log('🔄 Starting login request to http://localhost:5000/api/auth/login');
+      console.log('🔄 Starting login request to /api/auth/login');
       
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,0 +1,50 @@
+import { NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import db from '@/lib/db';
+
+export async function POST(request) {
+  try {
+    const { username, password } = await request.json();
+
+    if (!username || !password) {
+      return NextResponse.json({ success: false, message: 'All fields are required' }, { status: 400 });
+    }
+
+    // Find user
+    const [users] = await db.execute(
+      'SELECT * FROM users WHERE username = ?',
+      [username]
+    );
+
+    if (users.length === 0) {
+      return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 });
+    }
+
+    const user = users[0];
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 });
+    }
+
+    // Generate Token
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET || 'default_secret',
+      { expiresIn: '7d' }
+    );
+
+    return NextResponse.json({
+      success: true,
+      message: 'Login successful',
+      token,
+      user: { id: user.id, username: user.username, email: user.email }
+    });
+
+  } catch (error) {
+    console.error('Login Error:', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+  }
+}
